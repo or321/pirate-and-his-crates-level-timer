@@ -14,14 +14,7 @@ var _y2 = {
     _z2: [{
         _A2: ["tph_helper.js"],
         initfuncs: []
-    },
-    /*
-    {
-        _A2: ["uph_kongAPIextension.js"],
-        initfuncs: []
-    }
-    */
-    ],
+    }],
     _B2: [{
         _C2: "snd_chest",
         _D2: 0,
@@ -21337,7 +21330,7 @@ function _z4(__7, _08) {
 function _A4(__7, _08) {
     _h9(__7, _08);
 }
-// /// @description Insert description here 
+// Start a new speedrun from the main menu, after pressing "S"
 function _C4(__7, _08) {
     _i9(400, 30, "invisible", 9);
     _U9("Save.sav");
@@ -21347,7 +21340,7 @@ function _C4(__7, _08) {
     _G9(1);
     _za("GOLD NUGGETS");
 }
-// /// @description Activates speedrun 
+// Start a new speedrun from the main menu, after clicking on the speedrun button with the mouse
 function _D4(__7, _08) {
     _i9(400, 30, "invisible", 9);
     _U9("Save.sav");
@@ -86866,3 +86859,37 @@ function _VZ2() {
         _8A._k7._Q_2()
     }
 }
+
+/*
+Or321 notes:
+
+_g8._O8 function returns the number of the current level (1 to 15)
+_G9 function loads a new level with the given number (1 to 15)
+_y9(9) returns a boolean flag for whether we are currently in speedrun mode or not
+*/
+
+function IsSpeedrunMode(){
+    return _y9(9);
+}
+
+function GoToLevel(levelNum){
+    _G9(levelNum);
+}
+
+// Allow manually moving levels with "+"/"-" keys
+document.addEventListener("keydown", function(event) {
+    // Don't allow changing levels in speedrun mode
+    if (IsSpeedrunMode()) return;
+
+    var current_level = _g8._O8();
+
+    if (event.key === "+" || event.key === "=") {
+        if (current_level >= 15 || current_level < 1) return;
+        GoToLevel(current_level + 1);
+    }
+
+    if (event.key === "-") {
+        if (current_level <= 1 || current_level > 15) return;
+        GoToLevel(current_level - 1);
+    }
+});

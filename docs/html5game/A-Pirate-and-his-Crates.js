@@ -6718,6 +6718,19 @@ var _y2 = {
         _N3: _W5,
         _P3: [],
         _Q3: []
+    }, {
+        _C2: "obj_level_timer",
+        _t3: -1,
+        _u3: !0,
+        _94: !0,
+        parent: -100,
+        _v3: InitializeLevelTimer,
+        _F3: UpdateLevelTimer,
+        _e4: DrawLevelTimer,
+        _g4: OnPlayerInputLevelTimer,
+        _N3: _h9,
+        _P3: [],
+        _Q3: []
     }],
     _X5: [{
         _C2: "startupscreen",
@@ -21017,31 +21030,35 @@ function _a4(__7, _08) {
 function _b4(__7, _08) {
     _h9(__7, _08);
 }
-// /// @description Insert description here 
+// Or321: this is a function that runs when the timer instance is created
 function _c4(__7, _08) {
     __7._J9 = 0;
     __7._K9 = 0 ? 1 : 0;
 }
-// /// @description Insert description here 
+// Or321: this is a function that runs every frame, to update the timer
 function _d4(__7, _08) {
+    // Check for activation - only tick after the player has pressed any button
     if (!(__7._K9 > 0.5)) {
         return
     }
+    // _J9 is a variable that stores how many frames have passed from beginning of speedrun
     ;__7._J9 += 1;
 }
-// /// @description Insert description here 
+// Or321: this draws the timer on the screen
 function _f4(__7, _08) {
     _L9(16777215);
     _M9(1);
     _N9(1);
     _O9(1);
+    // __7._J9 stores the amount of frames from start of speedrun, _g8._R9() is the framerate (always 60 fps)
     var _P9 = _Q9((_N8(__7._J9) / _N8(_g8._R9())));
     _S9(__7.x, __7.y, _P9);
 }
-// /// @description Insert description here 
+// Or321: After entering speedrun mode (and creating a timer instance), this function activates on any button click
 function _h4(__7, _08) {
     __7._K9 = 1 ? 1 : 0;
 }
+// Or321: I have no idea what this function does
 function _i4(__7, _08) {
     _h9(__7, _08);
 }
@@ -21311,8 +21328,10 @@ function _u4(__7, _08) {
 }
 // /// @description Insert description here
 function _v4(__7, _08) {}
-// /// @description Insert description here
+// Or321: Load the first level after pressing "Play" in the main menu
 function _w4(__7, _08) {
+    CreateLevelTimerInstance(400, 30);
+
     _G9(1);
 }
 function _x4(__7, _08) {
@@ -21320,19 +21339,29 @@ function _x4(__7, _08) {
 }
 // /// @description Insert description here
 function _y4(__7, _08) {}
-// /// @description Insert description here
+// Or321: Load the relevant level after pressing "Continue" in the main menu
 function _z4(__7, _08) {
+    
+
     _U9("Save.sav");
     var _xa = _ka(_W9("Data", "lastlevelreached", 1));
+    _xa = _N8(_Q9(_xa));
+
+    CreateLevelTimerInstance(400, 30);
+
     _X9();
-    _G9(_ya(("level" + _N8(_Q9(_xa)))));
+    _G9(_ya(("level" + _xa)));
 }
 function _A4(__7, _08) {
     _h9(__7, _08);
 }
-// Start a new speedrun from the main menu, after pressing "S"
+// Or321: Start a new speedrun from the main menu, after pressing "S"
 function _C4(__7, _08) {
+    // Create new instance of speedrun timer
     _i9(400, 30, "invisible", 9);
+
+    CreateLevelTimerInstance(400, 50);
+
     _U9("Save.sav");
     var _da = _W9("Data", "speedrunattempts", 0);
     _3a("Data", "speedrunattempts", (_N8(_da) + 1));
@@ -21340,9 +21369,13 @@ function _C4(__7, _08) {
     _G9(1);
     _za("GOLD NUGGETS");
 }
-// Start a new speedrun from the main menu, after clicking on the speedrun button with the mouse
+// Or321: Start a new speedrun from the main menu, after clicking on the speedrun button with the mouse
 function _D4(__7, _08) {
+    // Create new instance of speedrun timer
     _i9(400, 30, "invisible", 9);
+
+    CreateLevelTimerInstance(400, 50);
+
     _U9("Save.sav");
     var _da = _W9("Data", "speedrunattempts", 0);
     _3a("Data", "speedrunattempts", (_N8(_da) + 1));
@@ -21376,7 +21409,7 @@ function _L4(__7, _08) {
 function _M4(__7, _08) {
     _h9(__7, _08);
 }
-// /// @description Insert description here 
+// Or321: Function that executes on reaching the end screen (initialization of "obj_end" instance)
 function _N4(__7, _08) {
     __7._Ba = 0;
     __7._Ca = 0.1;
@@ -21385,7 +21418,11 @@ function _N4(__7, _08) {
         {
             var _Ea = (_N8(_Q8(__7, _08, 9)._J9) / _N8(_g8._R9()));
             __7._Fa = _Q9(_Ea);
+            
+            // Remove the active instance of the speedrun timer
             _I9(__7, 9);
+            
+
             var _Ga = round(_Ea);
             _U9("Save.sav");
             var _ea = _W9("Data", "bestspeedrun", 10000);
@@ -21401,6 +21438,10 @@ function _N4(__7, _08) {
             ;
         }
     }
+    
+    // Remove the active instance of the level timer
+    _I9(__7, 42);
+
     ;_U9("Save.sav");
     _3a("Data", "completed", 1);
     _X9();
@@ -21452,9 +21493,11 @@ function _R4(__7, _08) {
 function _S4(__7, _08) {
     _h9(__7, _08);
 }
-// /// @description Insert description here 
+// Or321: Function that executes on returning to menu with the button on-screen ("obj_return_menu_button" instance)
 function _T4(__7, _08) {
     _g8._h8(60);
+
+    // Remove all active instances of "speedrun timer"
     {
         var _Ia = _48(9);
         for (var _Ja in _Ia) {
@@ -21468,11 +21511,29 @@ function _T4(__7, _08) {
             _I9(_Ka)
         }
     }
+
+    // Remove all active instances of "level timer"
+    {
+        var _Ia = _48(42);
+        for (var _Ja in _Ia) {
+            if (!_Ia.hasOwnProperty(_Ja))
+                continue;
+            var _Ka = _Ia[_Ja];
+            if (_Ka._78)
+                continue;
+            if (!_Ka._88)
+                continue;
+            _I9(_Ka)
+        }
+    }
+
     ;_G9(0);
 }
-// /// @description Insert description here 
+// Or321: Function that executes on returning to menu with "M" on the keyboard ("obj_return_menu_button" instance)
 function _V4(__7, _08) {
     _g8._h8(60);
+
+    // Remove all active instances of "speedrun timer"
     {
         var _La = _48(9);
         for (var _Ma in _La) {
@@ -21486,6 +21547,22 @@ function _V4(__7, _08) {
             _I9(_Na)
         }
     }
+
+    // Remove all active instances of "level timer"
+    {
+        var _Ia = _48(42);
+        for (var _Ja in _Ia) {
+            if (!_Ia.hasOwnProperty(_Ja))
+                continue;
+            var _Ka = _Ia[_Ja];
+            if (_Ka._78)
+                continue;
+            if (!_Ka._88)
+                continue;
+            _I9(_Ka)
+        }
+    }
+
     ;_G9(0);
 }
 function _W4(__7, _08) {
@@ -31678,26 +31755,49 @@ function _iS(_Xc, _Ej, _jS) {
     _kS._lS._06 = _jS
 }
 var _mS = _iS;
+// Or321: Load the next level, after the current level has finished
 function _P8() {
     if ((_qc._nS + 1) >= _wL._oS.length)
         return;
+
     _pS = _wL._qS(_qc._nS + 1).id
+
+    // Reset the frames count of the current level timer
+    levelTimer = GetLevelTimerInstance();
+    if (levelTimer) InitializeLevelTimer(levelTimer);
 }
+// Or321: Reset the current level
 function _d9() {
     _pS = _qc.id
+
+    // Reset the frames count of the current level timer
+    levelTimer = GetLevelTimerInstance();
+    if (levelTimer) InitializeLevelTimer(levelTimer);
 }
+// Or321: Load a level with the given index
 ;function _G9(_kL) {
     var _rS = _wL._gd(_kL);
     if ((_rS == null) || (_rS == undefined)) {
         _eA("Error: Room " + _kL + " is not a valid room index")
     } else {
         _pS = _kL
+
+        // Reset the frames count of the current level timer
+        levelTimer = GetLevelTimerInstance();
+        if (levelTimer) InitializeLevelTimer(levelTimer);
     }
 }
+
+// Or321: Load the previous level (this function is probably never called, dunno why it's here)
 ;function _pa() {
     if ((_qc._nS - 1) < 0)
         return;
+
     _pS = _wL._qS(_qc._nS - 1).id
+
+    // Reset the frames count of the current level timer
+    levelTimer = GetLevelTimerInstance();
+    if (levelTimer) InitializeLevelTimer(levelTimer);
 }
 ;;;function _dA() {
     _pS = _sS;
@@ -32590,6 +32690,8 @@ function _I8(_KT, _rU, _pU) {
     var _FV = _fV(_KT, _rU, _pU);
     if (_FV == null)
         return -1;
+
+    OnSound(_KT);
     _FV._LT.connect(_QT);
     _fU(_FV, _KT, (_pU > 0));
     _FV._mU = _PS;
@@ -86860,20 +86962,31 @@ function _VZ2() {
     }
 }
 
-/*
-Or321 notes:
+/****************************************************************/
 
-_g8._O8 function returns the number of the current level (1 to 15)
-_G9 function loads a new level with the given number (1 to 15)
-_y9(9) returns a boolean flag for whether we are currently in speedrun mode or not
-*/
+// Or321: Functions to handle the functionality of a new level-timer object (search this script for "obj_level_timer")
+
+var levelChests = [1, 1, 1, 2, 1, 2, 2, 2, 2, 3, 2, 2, 2, 3, 4];
 
 function IsSpeedrunMode(){
     return _y9(9);
 }
 
+function CurrentLevel(){
+    return _g8._O8();
+}
+
 function GoToLevel(levelNum){
     _G9(levelNum);
+}
+
+// Create new instance of level timer, positioned in the given coordinates
+function CreateLevelTimerInstance(x, y){
+    _i9(x, y, "invisible", 42);
+}
+
+function GetLevelTimerInstance(){
+    return _Q8(null, null, 42);
 }
 
 // Allow manually moving levels with "+"/"-" keys
@@ -86881,7 +86994,7 @@ document.addEventListener("keydown", function(event) {
     // Don't allow changing levels in speedrun mode
     if (IsSpeedrunMode()) return;
 
-    var current_level = _g8._O8();
+    var current_level = CurrentLevel();
 
     if (event.key === "+" || event.key === "=") {
         if (current_level >= 15 || current_level < 1) return;
@@ -86893,3 +87006,66 @@ document.addEventListener("keydown", function(event) {
         GoToLevel(current_level - 1);
     }
 });
+
+// For all those functions, __7 and _08 are instances of the level-timer object
+
+function InitializeLevelTimer(__7, _08) {
+    // _pS is the next level to load
+    __7.levelFrames = (_pS == 1) ? 0 : -1;
+    __7.inLevelTransition = false;
+    __7.playerInput = false;
+    __7.currentChests = 0;
+}
+
+function UpdateLevelTimer(__7, _08) {
+    // Don't increment the timer while in level transition
+    if (__7.inLevelTransition) return;
+
+    // Don't increment the timer at level 1 before the player pressed any key (to match the logic of the speedrun timer)
+    if (CurrentLevel() == 1 && !__7.playerInput) return;
+
+    __7.levelFrames += 1;
+}
+
+function DrawLevelTimer(__7, _08) {
+    // Control the text color, font, size, and maybe more things:
+    
+    _L9(16777215);
+    // Change the font size based on if we are in speedrun mode or not
+    _M9(IsSpeedrunMode() ? 0 : 1);
+
+    _N9(1);
+    _O9(1);
+
+    var fps = _N8(_g8._R9());
+    var levelTime = _Q9((_N8(__7.levelFrames) / fps));
+
+    // _S9 is the function that draws a text on the canvas in a given position
+    _S9(__7.x, __7.y, levelTime);
+}
+
+function OnPlayerInputLevelTimer(__7, _08){
+    __7.playerInput = true;
+}
+
+function OnSound(soundIndex){
+    var soundName = _y2._B2[soundIndex]._C2;
+
+    switch(soundName){
+        case "snd_chest":
+            OnCollectChest();
+            break;
+    }
+}
+
+function OnCollectChest() {
+    var levelTimer = GetLevelTimerInstance();
+    if (!levelTimer) return;
+
+    levelTimer.currentChests += 1;
+
+    // Check if the last chest of the level was collected
+    if (levelTimer.currentChests >= levelChests[CurrentLevel() - 1]){
+        levelTimer.inLevelTransition = true;
+    }
+}

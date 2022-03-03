@@ -81,7 +81,7 @@ var _y2 = {
         _E2: "",
         _F2: "snd_background_music",
         _G2: 0,
-        volume: 1,
+        volume: 0.3,
         _H2: 0,
         preload: !1,
         _I2: 0

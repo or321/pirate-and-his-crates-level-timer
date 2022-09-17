@@ -21320,8 +21320,16 @@ function _t4(__7, _08) {
     _M9(0);
     _N9(1);
     _O9(1);
+    
     var _P9 = ("level " + _N8(_Q9(_g8._O8())) + "/15");
-    _S9((_N8(_g8._C9) * 0.08), (_N8(_g8._D9) * 0.03), _P9);
+    var xPositionFactor = 0.08;
+
+    if (TAS_MODE) {
+        _P9 = "TAS - " + _P9;
+        xPositionFactor = 0.11;
+    }
+
+    _S9((_N8(_g8._C9) * xPositionFactor), (_N8(_g8._D9) * 0.03), _P9);
 }
 function _u4(__7, _08) {
     _h9(__7, _08);
@@ -73826,31 +73834,51 @@ function _RD2() {
 function _IA() {
     if (_2m2)
         return;
-    window.onkeyup = function() {
-        _SD2(arguments[0] || window.event)
-    }
-    ;
-    window.onkeydown = function() {
-        var _Ta2 = arguments[0] || window.event;
-        if ((_Yl2) && (_Ta2 != null) && (_Ta2.which == 121) && (!_Ta2.repeat) && (canvas.mozRequestFullScreen)) {
-            if (!document.mozFullScreen) {
-                _TD2();
-                _JD2()
-            } else {
-                _RD2()
-            }
-            _Ta2.preventDefault();
-            return false
+
+    if (TAS_MODE) {
+        // TAS - hijacking keyboard inputs into the coffee script
+        window.coffee._keydown(function (e) {
+            keyboardKeyDown(e);
+        });
+
+        window.coffee._keyup(function (e) {
+            keyboardKeyUp(e);
+        });
+    } else {
+        window.onkeydown = function() {
+            keyboardKeyDown(arguments[0] || window.event);
         }
-        if (_UD2(_Ta2) == false) {
-            _Ta2.preventDefault();
-            return false
+
+        window.onkeyup = function() {
+            keyboardKeyUp(arguments[0] || window.event);
         }
     }
-    ;
+
     window.onmouseup = _VD2;
     _2m2 = true
 }
+
+function keyboardKeyUp(e) {
+    _SD2(e);
+}
+function keyboardKeyDown(e) {
+    var _Ta2 = e;
+    if ((_Yl2) && (_Ta2 != null) && (_Ta2.which == 121) && (!_Ta2.repeat) && (canvas.mozRequestFullScreen)) {
+        if (!document.mozFullScreen) {
+            _TD2();
+            _JD2()
+        } else {
+            _RD2()
+        }
+        _Ta2.preventDefault();
+        return false
+    }
+    if (_UD2(_Ta2) == false) {
+        _Ta2.preventDefault();
+        return false
+    }
+}
+
 function _xA() {
     if (_2m2 == false)
         return;
@@ -87015,6 +87043,11 @@ function InitializeLevelTimer(__7, _08) {
     __7.inLevelTransition = false;
     __7.playerInput = false;
     __7.currentChests = 0;
+
+    if (TAS_MODE) {
+        // Notify the coffee script on entering a new level
+        window.coffee._onScene(_pS);
+    }
 }
 
 function UpdateLevelTimer(__7, _08) {

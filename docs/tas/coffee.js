@@ -243,7 +243,7 @@ Engine.prototype = {
 						console.log("[PAUSE ] @ " + (_gthis.control.frame + 1));
 						_gthis.control.silent = false;
 					} else if(_gthis.fullgameLevelCounter >= 1 && _gthis.fullgameLevelCounter <= 15) {
-						_gthis.initialDirections = _gthis.fullgameVideo[_gthis.fullgameLevelCounter - 1].initialDirections.copy();
+						_gthis.initialDirections = _gthis.fullgameVideo[_gthis.fullgameLevelCounter - 1].initialDirections.slice();
 						_gthis.control.frame = 0;
 						_gthis.primeControls(true);
 					}
@@ -453,7 +453,13 @@ Engine.prototype = {
 		return false;
 	}
 	,onScene: function(levelNum) {
+		if(levelNum == -1) {
+			return;
+		}
 		console.log("[SCENE " + levelNum + "]");
+		if(levelNum == 0) {
+			return;
+		}
 		if(this.fullgameVideo != null && this.fullgameVideo.length >= levelNum) {
 			this.fullgameLevelCounter = levelNum;
 			this.loadPlayback(this.fullgameVideo[this.fullgameLevelCounter - 1]);

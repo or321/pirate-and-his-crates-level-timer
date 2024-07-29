@@ -121,7 +121,7 @@ class Engine {
 							// for fullgame playback, prime the initial direction controls
 
 							if (fullgameLevelCounter >= 1 && fullgameLevelCounter <= 15) {
-								initialDirections = fullgameVideo[fullgameLevelCounter - 1].initialDirections.copy();
+								initialDirections = fullgameVideo[fullgameLevelCounter - 1].initialDirections.slice();
 								control.frame = 0;
 								primeControls(true);
 							}
@@ -372,8 +372,16 @@ class Engine {
 	function onScene(levelNum:Int) {
 		// Function that is called when a level in the game is loaded.
 		// This function is called from the game code itself.
-
+		
+		// I don't know what is this level number, so I ignore it
+		if (levelNum == -1)
+			return;
+		
 		trace('[SCENE ${levelNum}]');
+
+		// "level 0" is the main menu, no need to do anything here
+		if (levelNum == 0)
+			return;
 
 		// If we are in full game mode, prepare a video playback for the current level as the player enters it
 		if (fullgameVideo != null && fullgameVideo.length >= levelNum) {

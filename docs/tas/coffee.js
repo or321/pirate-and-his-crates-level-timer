@@ -612,7 +612,6 @@ Main.main = function() {
 	Main.infoTrace("`coffee.startLeft()` / `coffee.StartRight()` / `coffee.StartNeutral()` - configure the inputs on frame 0 of a level.");
 	Main.infoTrace("`coffee.loadFullGame(array<string>)` to play a full game of several levels. Parameter is array of video codes.");
 	Main.infoTrace("`coffee.clearFullGame()` to delete the current loaded full game video.");
-	Main.infoTrace("`coffee.setFPS(number)` to change the FPS value. Parameter must be an integer. Default FPS is 60.");
 	var engine = new Engine();
 };
 Math.__name__ = true;

@@ -304,7 +304,7 @@ Engine.prototype = {
 	}
 	,onKey: function(event,pressed) {
 		if(!Util.isSome(this.playback)) {
-			var suppress = [83,65,68,82];
+			var suppress = [83,65,68,82,90];
 			if(suppress.indexOf(event.keyCode) == -1) {
 				this.sendGameInput(event.keyCode,pressed);
 			}

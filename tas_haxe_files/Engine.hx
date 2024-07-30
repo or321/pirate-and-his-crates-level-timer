@@ -187,7 +187,7 @@ class Engine {
 	function onKey(event:Dynamic, pressed:Bool) {
 		if (!Util.isSome(playback)) {
 			// We're not in playback, so we should pass through keys.
-			var suppress = [83, 65, 68, 82]; // prevent pressing a/s/d and r
+			var suppress = [83, 65, 68, 82, 90]; // prevent pressing a/s/d/z and r
 			if (suppress.indexOf(event.keyCode) == -1)
 				sendGameInput(event.keyCode, pressed);
 		}

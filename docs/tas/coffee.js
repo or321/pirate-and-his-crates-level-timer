@@ -606,10 +606,13 @@ Main.main = function() {
 	Main.infoTrace("[z] to step frame.");
 	Main.infoTrace("[0-9] to reset and play back video in the respective slot (used for save states).");
 	Main.infoTrace("Ctrl + [0-9] to save video in the respective slot.");
-	Main.infoTrace("Alt + [0-9] to play back video in the respective slot, pausing on frame 1.");
+	Main.infoTrace("Alt + [0-9] to play back video in the respective slot, pausing on frame 0.");
 	Main.infoTrace("[Enter] to reset and play the video in slot 0 in normal speed.");
-	Main.infoTrace("`coffee.load(string)` to load a video into slot 0.");
-	Main.infoTrace("`coffee.startLeft()` / `coffee.StartRight()` / `coffee.StartNeutral()` - configure the inputs on frame 0 of a level.");
+	Main.infoTrace("`coffee.load(string, int)` to load a video code into the chosen savestate slot.");
+	Main.infoTrace("`coffee.initialLeft(bool)` - configure whether the left arrow key is pressed at start frame 0 of a level.");
+	Main.infoTrace("`coffee.initialRight(bool)` - configure whether the right arrow key is pressed at start frame 0 of a level.");
+	Main.infoTrace("`coffee.initialUp(bool)` - configure whether the up arrow key is pressed at start frame 0 of a level.");
+	Main.infoTrace("`coffee.initialDown(bool)` - configure whether the down arrow key is pressed at start frame 0 of a level.");
 	Main.infoTrace("`coffee.loadFullGame(array<string>)` to play a full game of several levels. Parameter is array of video codes.");
 	Main.infoTrace("`coffee.clearFullGame()` to delete the current loaded full game video.");
 	var engine = new Engine();

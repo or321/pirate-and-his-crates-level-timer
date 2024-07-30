@@ -326,7 +326,7 @@ class Engine {
 			return true;
 		}
 
-		// p to replay the video in slot 0 at normal speed
+		// Enter to replay the video in slot 0 at normal speed
 		if (input == CoffeeInput.Replay) {
 			resetLevel(0, true);
 			loadPlayback(slots[0]);

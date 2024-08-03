@@ -197,6 +197,8 @@ var Engine = function() {
 		_gthis.control.speed = 1;
 		_gthis.control.paused = false;
 		_gthis.triggerPausedCallback();
+		_gthis.initialDirections = _gthis.fullgameVideo[0].initialDirections.slice();
+		_gthis.primeControls(true);
 	};
 	window.coffee.clearFullGame = function(string1) {
 		_gthis.fullgameVideo = null;
@@ -242,8 +244,12 @@ Engine.prototype = {
 						_gthis.control.pause();
 						console.log("[PAUSE ] @ " + (_gthis.control.frame + 1));
 						_gthis.control.silent = false;
-					} else if(_gthis.fullgameLevelCounter >= 1 && _gthis.fullgameLevelCounter <= 15) {
-						_gthis.initialDirections = _gthis.fullgameVideo[_gthis.fullgameLevelCounter - 1].initialDirections.slice();
+					} else {
+						if(_gthis.fullgameLevelCounter >= 1 && _gthis.fullgameLevelCounter < _gthis.fullgameVideo.length) {
+							_gthis.initialDirections = _gthis.fullgameVideo[_gthis.fullgameLevelCounter - 1].initialDirections.slice();
+						} else {
+							_gthis.initialDirections = [false,false,false,false];
+						}
 						_gthis.control.frame = 0;
 						_gthis.primeControls(true);
 					}
@@ -457,16 +463,20 @@ Engine.prototype = {
 			return;
 		}
 		console.log("[SCENE " + levelNum + "]");
-		if(levelNum == 0) {
+		if(this.fullgameVideo == null) {
 			return;
 		}
-		if(this.fullgameVideo != null && this.fullgameVideo.length >= levelNum) {
+		if(levelNum == 0) {
+			this.initialDirections = this.fullgameVideo[0].initialDirections.slice();
+			this.primeControls(true);
+			return;
+		}
+		if(levelNum >= 1 && levelNum <= this.fullgameVideo.length) {
 			this.fullgameLevelCounter = levelNum;
 			this.loadPlayback(this.fullgameVideo[this.fullgameLevelCounter - 1]);
 			this.control.paused = false;
 			this.control.frame = 0;
 			this.control.speed = 1;
-			this.primeControls(false);
 		}
 	}
 	,truncateFloat: function(number,digits) {

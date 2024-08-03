@@ -74,6 +74,10 @@ class Engine {
 			control.speed = 1;
 			control.paused = false;
 			triggerPausedCallback();
+
+			// Prepare initial inputs for the first level. It is assumed the "loadFullGame" function is called in the main menu.
+			initialDirections = fullgameVideo[0].initialDirections.slice();
+			primeControls(true);
 		}
 
 		untyped window.coffee.clearFullGame = function(string:String) {
@@ -109,24 +113,29 @@ class Engine {
 						sendGameInput(action.code, action.pressed);
 					}
 
+					// playback for the current level has ended
 					if (control.frame + 1 >= player.video.pauseFrame) {
-						// playback is over
-
+						// If we are not in full game playback, pause at the last frame of a video
 						if (fullgameVideo == null) {
-							// normally, pause at the last frame of a video
+							
 							control.pause();
 							trace('[PAUSE ] @ ${control.frame + 1}');
 							control.silent = false;
-						} else {
-							// for fullgame playback, prime the initial direction controls
-
-							if (fullgameLevelCounter >= 1 && fullgameLevelCounter <= 15) {
+						} 
+						// For fullgame playback, prime the initial direction controls for the next level
+						else {
+							if (fullgameLevelCounter >= 1 && fullgameLevelCounter < fullgameVideo.length) {
 								initialDirections = fullgameVideo[fullgameLevelCounter - 1].initialDirections.slice();
-								control.frame = 0;
-								primeControls(true);
 							}
-						}
+							// If there is no next level to play, unpress all the initial direction controls
+							else{
+								initialDirections = [false, false, false, false];
+							}
 
+							control.frame = 0;
+							primeControls(true);
+						}  
+							
 						playback = None;
 					}
 				case None:
@@ -373,24 +382,30 @@ class Engine {
 		// Function that is called when a level in the game is loaded.
 		// This function is called from the game code itself.
 		
-		// I don't know what is this level number, so I ignore it
-		if (levelNum == -1)
-			return;
+		// Ignore "level -1", not sure why this parameter is sent sometimes
+		if (levelNum == -1) return;
 		
 		trace('[SCENE ${levelNum}]');
 
-		// "level 0" is the main menu, no need to do anything here
-		if (levelNum == 0)
+		// We are not in full game playback, so nothing to do here
+		if (fullgameVideo == null)
 			return;
 
-		// If we are in full game mode, prepare a video playback for the current level as the player enters it
-		if (fullgameVideo != null && fullgameVideo.length >= levelNum) {
+		// We enter the main menu, prepare inputs for the first level.
+		if (levelNum == 0){
+			initialDirections = fullgameVideo[0].initialDirections.slice();
+			primeControls(true);
+			return;
+		}
+
+		// Prepare a video playback for the current level as the player enters it
+		if (levelNum >= 1 && levelNum <= fullgameVideo.length) {
 			fullgameLevelCounter = levelNum;
 			loadPlayback(fullgameVideo[fullgameLevelCounter - 1]);
 			control.paused = false;
 			control.frame = 0;
 			control.speed = 1;
-			primeControls(false);
+			//primeControls(true);
 		}
 	}
 

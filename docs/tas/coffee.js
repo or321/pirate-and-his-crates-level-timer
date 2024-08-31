@@ -246,7 +246,7 @@ Engine.prototype = {
 						_gthis.control.silent = false;
 					} else {
 						if(_gthis.fullgameLevelCounter >= 1 && _gthis.fullgameLevelCounter < _gthis.fullgameVideo.length) {
-							_gthis.initialDirections = _gthis.fullgameVideo[_gthis.fullgameLevelCounter - 1].initialDirections.slice();
+							_gthis.initialDirections = _gthis.fullgameVideo[_gthis.fullgameLevelCounter].initialDirections.slice();
 						} else {
 							_gthis.initialDirections = [false,false,false,false];
 						}
@@ -310,7 +310,7 @@ Engine.prototype = {
 	}
 	,onKey: function(event,pressed) {
 		if(!Util.isSome(this.playback)) {
-			var suppress = [83,65,68,82,90];
+			var suppress = [83,65,68,82,90,49];
 			if(suppress.indexOf(event.keyCode) == -1) {
 				this.sendGameInput(event.keyCode,pressed);
 			}

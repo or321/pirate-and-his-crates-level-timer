@@ -125,7 +125,7 @@ class Engine {
 						// For fullgame playback, prime the initial direction controls for the next level
 						else {
 							if (fullgameLevelCounter >= 1 && fullgameLevelCounter < fullgameVideo.length) {
-								initialDirections = fullgameVideo[fullgameLevelCounter - 1].initialDirections.slice();
+								initialDirections = fullgameVideo[fullgameLevelCounter].initialDirections.slice();
 							}
 							// If there is no next level to play, unpress all the initial direction controls
 							else{
@@ -196,7 +196,11 @@ class Engine {
 	function onKey(event:Dynamic, pressed:Bool) {
 		if (!Util.isSome(playback)) {
 			// We're not in playback, so we should pass through keys.
-			var suppress = [83, 65, 68, 82, 90]; // prevent pressing a/s/d/z and r
+
+			// Prevent pressing a/s/d/z and r. 
+			// Also prevent pressing "1", it automatically send you to level 1, no matter where you are in the game.
+			var suppress = [83, 65, 68, 82, 90, 49]; 
+
 			if (suppress.indexOf(event.keyCode) == -1)
 				sendGameInput(event.keyCode, pressed);
 		}
@@ -384,7 +388,7 @@ class Engine {
 		
 		// Ignore "level -1", not sure why this parameter is sent sometimes
 		if (levelNum == -1) return;
-		
+
 		trace('[SCENE ${levelNum}]');
 
 		// We are not in full game playback, so nothing to do here

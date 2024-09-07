@@ -20523,10 +20523,8 @@ var _y2 = {
         _a7: 46,
         _b7: 0
     }],
-    _c7: ["A-Pirate-and-his-Crates_texture_0.png"],
-    _d7: [{
-        MipsToGenerate: 0
-    }],
+    _c7: [UrlParams.texturesFile],
+    _d7: [{MipsToGenerate: 0}],
     _e7: [{
         _C2: "Default",
         _f7: [0],
